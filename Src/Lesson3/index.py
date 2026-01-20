@@ -62,8 +62,8 @@ def gamma_correction(img, gamma: float):
 
 # imageEdge = detectTheBorderImg(image)
 # showImage(imageEdge)
-image_transferred = transferGrayScale(image)
-showImage(image_transferred)
-image_transferred = gamma_correction(image_transferred,2)
+# image_transferred = transferGrayScale(image)
+# showImage(image_transferred)
+# image_transferred = gamma_correction(image_transferred,2)
 # image_transferred = detectNegativeImg(image)
-showImage(image_transferred)
+# showImage(image_transferred)
