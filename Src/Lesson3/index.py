@@ -1,7 +1,11 @@
 import cv2 as cv
 import numpy as np
+import os
 
-image = cv.imread("..\..\Images\lena_std.tif")
+BASE_DIR = os.path.dirname(__file__)
+image_path = os.path.join(BASE_DIR, "..", "..", "Images", "lena_std.tif")
+
+image = cv.imread(image_path)
 # print(image.shape)
 
 def transferGrayScale(img) -> np.ndarray | None:
@@ -59,6 +63,7 @@ def gamma_correction(img, gamma: float):
 # imageEdge = detectTheBorderImg(image)
 # showImage(imageEdge)
 image_transferred = transferGrayScale(image)
+showImage(image_transferred)
 image_transferred = gamma_correction(image_transferred,2)
 # image_transferred = detectNegativeImg(image)
 showImage(image_transferred)
