@@ -4,7 +4,7 @@ from HelperFunc import showImg
 import os 
 
 BASE_DIR = os.path.dirname(__file__)
-image_path = os.path.join(BASE_DIR, "..", "..", "Images", "lena_std.tif")
+image_path = os.path.join(BASE_DIR, "..", "..", "Images", "Head_Film.png")
 
 
 image = cv.imread(image_path)
@@ -38,25 +38,25 @@ def add_gaussian_noise(image, mean=0, var=200):
     return noisy.astype(np.uint8)
 
 
-# Lọc trung bình
+# Lọc trung bình (lowpass)
 def Mean_Filter(image, N):
     if N%2==0:
         return image
 
     h, w = image.shape
     pad = N // 2
-
+    kernel = (1/N**2)*np.ones((N,N))
     # Padding để không bị lỗi biên
     padded = np.pad(image, pad_width=pad, mode='edge')
     # print(padded.shape)
     # Ảnh output
+    # kernel = np.zeros(N,dtype=)
     output = np.zeros_like(image,dtype=np.uint8)
 
     for i in range(h):
         for j in range(w):
             window = padded[i:i+N, j:j+N]
-            output[i, j] = np.mean(window)
-
+            output[i, j] = np.sum(window * kernel)
     return output 
 
 # Lọc trung vị
@@ -73,24 +73,47 @@ def Meadian_Filter(image,windowSize):
     return image
             
 # Lọc băng thông cao cơ bản
-# def high_pass(image,Kernel):
-#     h,w = Kernel.shape
-#     if w %2 == 0:
-#         print("Kernel is odd, Pls let kernel is even")
-#         return None
-#     pad = Kernel//2
-#     padded = np.pad(image, pad_width= pad, mode='edge')
-#     for i in range(h):
-#         for j in range(w):
-#             window = padded[i:i+pad,j:j+pad]
-#             target = Kernel*window
-#             image[i][j] = 
+def high_pass(image,Kernel):
+    Kernel = Kernel.astype(np.float32)
+    h,w = Kernel.shape
+    if w %2 == 0:
+        print("Kernel size must be odd")
+        return None
+    pad = w//2
+    padded = np.pad(image, pad_width= pad, mode='edge')
+    output = np.zeros_like(image, dtype=np.float32)
+    H,W= image.shape
+    for i in range(H):
+        for j in range(W):
+            window = padded[i:i+h,j:j+w]
+            target = np.sum(window*Kernel)
+            output[i][j] = target
+    return np.clip(output, 0, 255).astype(np.uint8)
+
+def high_boost(img,A):
+    img = image.astype(np.float32)
+    blur = Mean_Filter(image, 17).astype(np.float32)
+    high_boost = A * img - blur
+    high_boost = np.clip(high_boost, 0, 255).astype(np.uint8)
+    return high_boost
 
 
+#Lọc theo đạo hàm
 
-
+    
+# image = Mean_Filter(image,7)
 # image = add_salt_pepper_noise(image,prob= 0.2)
 # image = Meadian_Filter(image,3)
+# kernel = 4*np.array([[-1,-1,-1],
+#                   [-1,8,-1],
+#                   [-1,-1,-1]])
+# image = high_pass(image,kernel)
+## Sài công thức như thầy vẫn ổn
+# image = image - Mean_Filter(image,3)
+# image = np.clip(image,0,255).astype(np.uint8)
+
+## High-boost theo công thức slide 
+image = high_boost(image,3)
 # print(image.shape)
 # print(image)
 showImg(image)
