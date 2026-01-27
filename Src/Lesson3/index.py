@@ -161,9 +161,10 @@ target_hist = np.zeros(256)
 target_hist[231:256] = 1
 
 image_transferred = transferGrayScale(image)    
-drawHis(image_transferred)
-image_transferred = histogram_specification(image_transferred,target_hist=target_hist)
-drawHis(image_transferred)
+image_transferred = bit_plane_slicing(image_transferred)
+# drawHis(image_transferred)
+# image_transferred = histogram_specification(image_transferred,target_hist=target_hist)
+# drawHis(image_transferred)
 # image_transferred = bit_plane_slicing(image_transferred)
 # image_transferred= cv.equalizeHist(image_transferred)
 

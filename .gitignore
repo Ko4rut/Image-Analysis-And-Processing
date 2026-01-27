@@ -1,2 +1,6 @@
 # Ignore Books folder
 Books/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
