@@ -99,8 +99,52 @@ def high_boost(img,A):
 
 
 #Lọc theo đạo hàm
+def gradien_filter(img, kernel):
+    img = img.astype(np.float32)
+    output = np.zeros_like(img, dtype=np.float32)
+    h,w = kernel.shape
+    padding = w//2
+    padded = np.pad(img, padding,mode="edge")
+    h_img, w_img = img.shape
+    for i in range(h_img):
+        for j in range(w_img):
+            window = padded[i:i+h, j:j+w]
+            output[i,j]=np.sum(window*kernel)
+    return np.clip(output,0,255).astype(np.uint8)
 
     
+ # thử lọc theo Prewitt
+
+def prewitt_filter(img):
+    img = img.astype(np.float32)
+
+    kx = np.array([
+        [-1, 0, 1],
+        [-1, 0, 1],
+        [-1, 0, 1]
+    ], dtype=np.float32)
+
+    ky = np.array([
+        [-1, -1, -1],
+        [ 0,  0,  0],
+        [ 1,  1,  1]
+    ], dtype=np.float32)
+
+    pad = 1
+    padded = np.pad(img, pad, mode='edge')
+
+    H, W = img.shape
+    output = np.zeros((H, W), dtype=np.float32)
+
+    for i in range(H):
+        for j in range(W):
+            window = padded[i:i+3, j:j+3]
+            Gx = np.sum(window * kx)
+            Gy = np.sum(window * ky)
+            output[i, j] = np.sqrt(Gx*Gx + Gy*Gy)
+
+    return np.clip(output, 0, 255).astype(np.uint8)
+   
 # image = Mean_Filter(image,7)
 # image = add_salt_pepper_noise(image,prob= 0.2)
 # image = Meadian_Filter(image,3)
@@ -113,7 +157,25 @@ def high_boost(img,A):
 # image = np.clip(image,0,255).astype(np.uint8)
 
 ## High-boost theo công thức slide 
-image = high_boost(image,3)
+# image = high_boost(image,3)
+
+
+kx = np.array([
+    [-1, 1]
+])
+
+ky = np.array([
+    [-1],
+    [ 1]
+])
+
+kx = np.array([
+    [-1, 0, 1],
+    [-2, 0, 2],
+    [-1, 0, 1]
+])
+# image = gradien_filter(image,kx)
+image = prewitt_filter(image)
 # print(image.shape)
 # print(image)
 showImg(image)
