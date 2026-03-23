@@ -157,25 +157,25 @@ def prewitt_filter(img):
 # image = np.clip(image,0,255).astype(np.uint8)
 
 ## High-boost theo công thức slide 
-# image = high_boost(image,3)
+image = high_boost(image,3)
 
 
-kx = np.array([
-    [-1, 1]
-])
+# kx = np.array([
+#     [-1, 1]
+# ])
 
-ky = np.array([
-    [-1],
-    [ 1]
-])
+# ky = np.array([
+#     [-1],
+#     [ 1]
+# ])
 
-kx = np.array([
-    [-1, 0, 1],
-    [-2, 0, 2],
-    [-1, 0, 1]
-])
+# kx = np.array([
+#     [-1, 0, 1],
+#     [-2, 0, 2],
+#     [-1, 0, 1]
+# ])
 # image = gradien_filter(image,kx)
-image = prewitt_filter(image)
+# image = prewitt_filter(image)
 # print(image.shape)
 # print(image)
 showImg(image)
